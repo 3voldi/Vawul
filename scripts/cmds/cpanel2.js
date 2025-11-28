@@ -9,10 +9,10 @@ module.exports = {
   config: {
     name: "cpanel2",
     version: "4.8",
-    author: "Fahad Islam",
-    description: "Generates an animated hex-style system dashboard GIF.",
+    author: "Christus",
+    description: "Génère un GIF animé type tableau de bord système en style hexagonal.",
     usage: "cpanel",
-    category: "system",
+    category: "système",
     role: 0
   },
 
@@ -37,7 +37,7 @@ module.exports = {
         const d = Math.floor(sec / 86400);
         const h = Math.floor((sec % 86400) / 3600);
         const m = Math.floor((sec % 3600) / 60);
-        return `${d}d ${h}h ${m}m`;
+        return `${d}j ${h}h ${m}m`;
       };
 
       const getSystemStats = () => {
@@ -46,19 +46,19 @@ module.exports = {
         const freeMem = os.freemem() / 1024 / 1024 / 1024;
         const usedMem = totalMem - freeMem;
         return [
-          ["BOT UPTIME", formatUptime(process.uptime())],
-          ["CPU CORES", os.cpus().length.toString()],
+          ["UPTIME BOT", formatUptime(process.uptime())],
+          ["COEURS CPU", os.cpus().length.toString()],
           ["NODE.JS", process.version],
-          ["DISK USAGE", "21.8%"],
-          ["RAM USAGE", (usedMem / totalMem * 100).toFixed(1) + "%"],
-          ["SYS UPTIME", formatUptime(uptime)],
-          ["TOTAL DISK", "45.0 GB"],
-          ["CPU USAGE", os.loadavg()[0].toFixed(1) + "%"],
-          ["TOTAL RAM", totalMem.toFixed(1) + " GB"]
+          ["DISQUE UTILISÉ", "21.8%"],
+          ["RAM UTILISÉE", (usedMem / totalMem * 100).toFixed(1) + "%"],
+          ["UPTIME SYSTÈME", formatUptime(uptime)],
+          ["DISQUE TOTAL", "45.0 GB"],
+          ["CPU UTILISÉ", os.loadavg()[0].toFixed(1) + "%"],
+          ["RAM TOTALE", totalMem.toFixed(1) + " GB"]
         ];
       };
 
-      const hexColors = ["#ffff55", "#55ff55", "#5599ff", "#cc55ff", "#aa7755"]; // 🟨 🟩 🟦 🟪 🟫
+      const hexColors = ["#ffff55", "#55ff55", "#5599ff", "#cc55ff", "#aa7755"];
 
       const drawHex = (x, y, label, value, alpha = 1, color = "#00ff99") => {
         const r = 100;
@@ -112,9 +112,6 @@ module.exports = {
         ctx.fillStyle = "#00ffcc";
         ctx.font = "bold 32px Arial";
         ctx.textAlign = "center";
-        ctx.fillText("", width / 2, 60);
-        ctx.font = "20px Arial";
-        ctx.fillText("", width / 2, 90);
 
         ctx.font = "16px Arial";
         ctx.fillStyle = "#ffffff";
@@ -136,14 +133,14 @@ module.exports = {
 
       stream.on("finish", () => {
         api.sendMessage({
-          body: "",
+          body: "📊 Voici votre tableau de bord animé !",
           attachment: fs.createReadStream(filePath)
         }, event.threadID, () => fs.unlinkSync(filePath));
       });
 
     } catch (err) {
       console.error(err);
-      api.sendMessage("❌ An error occurred while generating the dashboard.", event.threadID);
+      api.sendMessage("❌ Une erreur est survenue lors de la génération du tableau de bord.", event.threadID);
     }
   }
 };
