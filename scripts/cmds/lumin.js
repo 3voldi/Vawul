@@ -6,15 +6,15 @@ module.exports = {
   config: {
     name: "lumin",
     version: "1.0",
-    author: "Saimx69x (API by Renz)",
+    author: "Christus",
     countDown: 5,
     role: 0,
     description: {
-      en: "Generate an AI image using the Oculux Luminarium API",
+      fr: "Génère une image IA en utilisant l'API Oculux Luminarium",
     },
-    category: "image generator",
+    category: "générateur d'images",
     guide: {
-      en: "{pn} <prompt>\nExample: /lumin futuristic neon city at night",
+      fr: "{pn} <prompt>\nExemple : /lumin ville néon futuriste de nuit",
     },
   },
 
@@ -34,12 +34,12 @@ module.exports = {
     const prompt = args.join(" ");
     if (!prompt) {
       return message.reply(
-        `⚠️ Please provide a prompt.\nExample: ${prefix}${commandName} futuristic neon city at night`
+        `⚠️ Veuillez fournir un prompt.\nExemple : ${prefix}${commandName} ville néon futuriste de nuit`
       );
     }
 
     api.setMessageReaction("🎨", event.messageID, () => {}, true);
-    const waitingMsg = await message.reply("🎨 Generating your Luminarium image... Please wait...");
+    const waitingMsg = await message.reply("🎨 Génération de votre image Luminarium... Veuillez patienter...");
 
     const encodedPrompt = encodeURIComponent(prompt);
     const url = `https://dev.oculux.xyz/api/luminarium?prompt=${encodedPrompt}`;
@@ -51,7 +51,7 @@ module.exports = {
 
       await message.reply(
         {
-          body: `✅ Here is your generated ${commandName} image.`,
+          body: `✅ Voici votre image générée ${commandName}.`,
           attachment: fs.createReadStream(imgPath),
         },
         () => {
@@ -60,8 +60,8 @@ module.exports = {
         }
       );
     } catch (error) {
-      console.error("Luminarium generation error:", error);
-      message.reply("⚠️ Failed to generate image. Please try again later.");
+      console.error("Erreur de génération Luminarium :", error);
+      message.reply("⚠️ Échec de la génération de l'image. Veuillez réessayer plus tard.");
       if (waitingMsg?.messageID) api.unsendMessage(waitingMsg.messageID);
     }
   },
