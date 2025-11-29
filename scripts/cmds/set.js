@@ -2,12 +2,12 @@ module.exports = {
   config: {
     name: "set",
     version: "2.0",
-    author: "xnil6x",
-    shortDescription: "Admin data management",
-    longDescription: "Set user money, exp, or custom variables (admin only)",
+    author: "Christus",
+    shortDescription: "Gestion des données admin",
+    longDescription: "Définir l'argent, l'expérience ou des variables personnalisées d'un utilisateur (admin uniquement)",
     category: "Admin",
     guide: {
-      en: "{p}set money [amount] [@user]\n{p}set exp [amount] [@user]\n{p}set custom [variable] [value] [@user]"
+      fr: "{p}set money [montant] [@utilisateur]\n{p}set exp [montant] [@utilisateur]\n{p}set custom [variable] [valeur] [@utilisateur]"
     },
     role: 2
   },
@@ -17,7 +17,7 @@ module.exports = {
       const ADMIN_UIDS = ["61580333625022", "61568791604271"];
       
       if (!ADMIN_UIDS.includes(event.senderID.toString())) {
-        return api.sendMessage("⛔ Access Denied: Admin privileges required", event.threadID);
+        return api.sendMessage("⛔ Accès refusé : privilèges admin requis", event.threadID);
       }
 
       const action = args[0]?.toLowerCase();
@@ -26,36 +26,36 @@ module.exports = {
       const userData = await usersData.get(targetID);
 
       if (!userData) {
-        return api.sendMessage("❌ User not found in database", event.threadID);
+        return api.sendMessage("❌ Utilisateur introuvable dans la base de données", event.threadID);
       }
 
       switch (action) {
         case 'money':
-          if (isNaN(amount)) return api.sendMessage("❌ Invalid amount", event.threadID);
+          if (isNaN(amount)) return api.sendMessage("❌ Montant invalide", event.threadID);
           await usersData.set(targetID, { money: amount });
-          return api.sendMessage(`💰 Set money to ${amount} for ${userData.name}`, event.threadID);
+          return api.sendMessage(`💰 Argent défini à ${amount} pour ${userData.name}`, event.threadID);
 
         case 'exp':
-          if (isNaN(amount)) return api.sendMessage("❌ Invalid amount", event.threadID);
+          if (isNaN(amount)) return api.sendMessage("❌ Montant invalide", event.threadID);
           await usersData.set(targetID, { exp: amount });
-          return api.sendMessage(`🌟 Set exp to ${amount} for ${userData.name}`, event.threadID);
+          return api.sendMessage(`🌟 Expérience définie à ${amount} pour ${userData.name}`, event.threadID);
 
         case 'custom':
           const variable = args[1];
           const value = args[2];
           if (!variable || value === undefined) {
-            return api.sendMessage("❌ Usage: {p}set custom [variable] [value] [@user]", event.threadID);
+            return api.sendMessage("❌ Utilisation : {p}set custom [variable] [valeur] [@utilisateur]", event.threadID);
           }
           await usersData.set(targetID, { [variable]: value });
-          return api.sendMessage(`🔧 Set ${variable} to ${value} for ${userData.name}`, event.threadID);
+          return api.sendMessage(`🔧 Variable ${variable} définie à ${value} pour ${userData.name}`, event.threadID);
 
         default:
-          return api.sendMessage("❌ Invalid action. Available options: money, exp, custom", event.threadID);
+          return api.sendMessage("❌ Action invalide. Options disponibles : money, exp, custom", event.threadID);
       }
 
     } catch (error) {
-      console.error("Admin Set Error:", error);
-      return api.sendMessage("⚠️ Command failed: " + error.message, event.threadID);
+      console.error("Erreur Admin Set :", error);
+      return api.sendMessage("⚠️ Commande échouée : " + error.message, event.threadID);
     }
   }
 };
